@@ -98,6 +98,7 @@ JOIN ( SELECT COUNT(DISTINCT movie_id) AS N
 La requête pour les réalisateurs est extrêmement similaire, puisqu'il suffit simplement de prendre la correspondance réalisateur/film dans `movies_directors` au lieu de `roles`, de la même manière que pour la requête 1.
 La version Redis de cette requête se trouve dans le fichier `request2.py`.
 Voilà ci-dessous le résultat pour l'acteur d'ID 86164, ainsi que le résultat obtenu via la requête SQL dans la BDD MySQL.
+
 ![](https://i.imgur.com/SKOhwts.png)
 
 ![](https://i.imgur.com/X1ZtBhk.png)
@@ -117,6 +118,7 @@ SELECT name, rank FROM movies WHERE id IN (
 ```
 La version Redis de cette requête se trouve dans le fichier `request3.py`.
 Voici les résultats pour l'acteur d'id 86164 et le réalisateur d'id 85162, ainsi que le résultat obtenu via la requête SQL dans la BDD MySQL. Ici, le rank est à NULL pour tous les films, je n'ai pas réussi à trouver de couple (acteur, réalisateur) avec plusieurs films ayant un rang.
+
 ![](https://i.imgur.com/4Dku8eA.png)
 
 ![](https://i.imgur.com/MzW7E4G.png)
@@ -130,12 +132,12 @@ La requête SQL est la suivante:
 ```
 SELECT COUNT(act1.movie_id) AS counter, act1.actor_id, act2.actor_id FROM (
     SELECT actor_id, movie_id FROM roles WHERE movie_id IN (
-        SELECT movie_id FROM movies_genres WHERE genre='Film-Noir'
+        SELECT movie_id FROM movies_genres WHERE genre=<genre>
     )
 ) act1
 JOIN (
     SELECT actor_id, movie_id FROM roles WHERE movie_id IN (
-        SELECT movie_id FROM movies_genres WHERE genre='Film-Noir'
+        SELECT movie_id FROM movies_genres WHERE genre=<genre>
     )
 ) act2 
 ON act1.movie_id=act2.movie_id AND act1.actor_id<>act2.actor_id
