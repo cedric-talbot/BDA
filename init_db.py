@@ -18,6 +18,7 @@ r = redis.Redis()
 # A pipeline allows us to only call the server once instead of calling it with every request
 with r.pipeline() as pipe:
   obj = {}
+  # Adding actors to obj
   mycursor.execute("SELECT * FROM actors")
   for x in mycursor:
     obj["actor:"+str(x[0])] = {
@@ -34,6 +35,7 @@ with r.pipeline() as pipe:
       "role": x[2]
     })
 
+  # Adding directors to obj
   mycursor.execute("SELECT * FROM directors")
   for x in mycursor:
     obj["director:"+str(x[0])] = {
@@ -54,6 +56,7 @@ with r.pipeline() as pipe:
   for x in mycursor:
     obj["director:"+str(x[0])]["movies"].append(x[1])
 
+  # Adding movies to obj
   mycursor.execute("SELECT * FROM movies")
   for x in mycursor:
     obj["movie:"+str(x[0])] = {
@@ -68,6 +71,7 @@ with r.pipeline() as pipe:
     obj["movie:"+str(x[0])]["genres"].append(x[1])
 
   for key in obj.keys():
+    # Redis doesn't support complex objects, so they will be stored as JSON strings
     json_obj = json.dumps(obj[key])
     pipe.set(key, json_obj)
 
