@@ -14,7 +14,7 @@ mycursor = mydb.cursor()
 
 # Open connection to local Redis DB (requires you to run a local redis server)
 r = redis.Redis()
-
+r.flushall()
 # A pipeline allows us to only call the server once instead of calling it with every request
 with r.pipeline() as pipe:
   obj = {}
