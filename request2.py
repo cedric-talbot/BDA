@@ -2,18 +2,9 @@ import redis
 import json
 from collections import defaultdict
 
+from helpers import get_movies_keys_by_actor_id
+
 r = redis.Redis()
-
-def get_movies_keys_by_actor_id(actor_id):
-  item = r.get("actor:"+str(actor_id))
-  # Unload the JSON object
-  data = json.loads(item.decode('utf-8'))
-  movies = []
-  for role in data["roles"]:
-    movies.append("movie:"+str(role["movie_id"]))
-  return movies
-
-
 
 def get_by_actor_id(actor_id):
   # Get the movies
