@@ -1,6 +1,3 @@
-# director_id: 85162
-# actor_id: 86164
-
 import redis
 import json
 
