@@ -20,3 +20,14 @@ def get_movies_keys_by_director_id(director_id):
   for movie in data["movies"]:
     movies.append("movie:"+str(movie))
   return movies
+
+def get_movies_ids_from_genre(genre):
+  movies_keys = r.keys("movie:*")
+  movies_data = r.mget(movies_keys)
+  res = []
+  for i in range(len(movies_data)):
+    data = json.loads(movies_data[i].decode('utf-8'))
+    if genre in data["genres"]:
+      res.append(movies_keys[i][6:].decode('utf-8'))
+  return res
+  
