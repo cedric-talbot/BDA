@@ -16,6 +16,8 @@ def get_by_actor_name(first_name, last_name):
       for role in obj["roles"]:
         # Already add the redis keys instead of the ids alone
         movie_ids.append("movie:"+str(role["movie_id"]))
+      # We consider here that there is only one actor with a given name
+      break
 
   # Get the corresponding movies from the keys
   data_movies = r.mget(movie_ids)
@@ -38,6 +40,8 @@ def get_by_director_name(first_name, last_name):
       for movie_id in obj["movies"]:
         # Already add the redis keys instead of the ids alone
         movie_ids.append("movie:"+str(movie_id))
+      # We consider here that there is only one director with a given name
+      break
 
   # Get the corresponding movies from the keys
   data_movies = r.mget(movie_ids)
